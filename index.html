@@ -1,0 +1,481 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Roza ❤️</title>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: 'Georgia', serif;
+    background: linear-gradient(135deg, #ffd6e7, #e8c7ff, #ffcce0);
+    color: #8e315f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow-x: hidden;
+    padding: 20px;
+}
+
+.screen {
+    width: 100%;
+    max-width: 750px;
+    display: none;
+    animation: fadeIn 1s ease;
+}
+
+.screen.active {
+    display: block;
+}
+
+h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    margin-bottom: 25px;
+}
+
+p {
+    line-height: 1.7;
+}
+
+button {
+    border: none;
+    background: #e75480;
+    color: white;
+    padding: 14px 25px;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 12px;
+    transition: 0.3s;
+    box-shadow: 0 5px 15px #d46b9a55;
+}
+
+button:hover {
+    transform: scale(1.08);
+    background: #cf3470;
+}
+
+.intro-text {
+    font-size: clamp(1rem, 3vw, 1.4rem);
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+}
+
+.heart {
+    font-size: 3rem;
+    animation: heartbeat 1.2s infinite;
+    margin-bottom: 15px;
+}
+
+.gifts {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin: 35px 0;
+}
+
+.gift {
+    width: 140px;
+    height: 140px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.gift:hover {
+    transform: translateY(-8px);
+}
+
+.gift-box {
+    position: absolute;
+    width: 100%;
+    height: 90px;
+    bottom: 0;
+    background: #e75480;
+    border-radius: 8px;
+}
+
+.gift-box::before {
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 100%;
+    left: 59px;
+    background: #ffe4ed;
+}
+
+.gift-lid {
+    position: absolute;
+    width: 110%;
+    height: 28px;
+    left: -5%;
+    top: 22px;
+    background: #c92f6c;
+    border-radius: 6px;
+    transition: transform 0.6s;
+    z-index: 2;
+}
+
+.gift.opened .gift-lid {
+    transform: translateY(-75px) rotate(-15deg);
+}
+
+.gift-number {
+    position: absolute;
+    top: -5px;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #8e315f;
+}
+
+.gift-label {
+    position: absolute;
+    bottom: -30px;
+    width: 100%;
+    font-size: 0.9rem;
+}
+
+.gift-content {
+    display: none;
+    margin: 20px auto;
+    animation: fadeIn 1s ease;
+}
+
+.gift-content.show {
+    display: block;
+}
+
+.candle-area {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    gap: 35px;
+    margin: 35px 0;
+    min-height: 130px;
+}
+
+.candle {
+    width: 25px;
+    height: 90px;
+    background: repeating-linear-gradient(
+        45deg,
+        #fff0f5,
+        #fff0f5 8px,
+        #ff9cba 8px,
+        #ff9cba 16px
+    );
+    border-radius: 5px;
+    position: relative;
+}
+
+.flame {
+    position: absolute;
+    width: 17px;
+    height: 27px;
+    background: radial-gradient(circle, #fff9a6, #ff9d00, #ff4b00);
+    border-radius: 50% 50% 40% 40%;
+    top: -29px;
+    left: 4px;
+    animation: flicker 0.3s infinite alternate;
+    box-shadow: 0 0 20px #ff9d00;
+}
+
+.flame.blown {
+    display: none;
+}
+
+.smoke {
+    display: none;
+    position: absolute;
+    top: -35px;
+    left: 5px;
+    font-size: 25px;
+    animation: smoke 1.5s forwards;
+}
+
+.smoke.show {
+    display: block;
+}
+
+.letter {
+    display: none;
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 30px 25px;
+    background: #fff8fb;
+    border-radius: 20px;
+    box-shadow: 0 10px 35px #a84b7950;
+    text-align: left;
+    white-space: pre-line;
+    line-height: 1.8;
+    font-size: 1rem;
+    animation: fadeIn 1s ease;
+}
+
+.letter.show {
+    display: block;
+}
+
+.letter h2 {
+    text-align: center;
+    color: #d43c78;
+    margin-bottom: 20px;
+}
+
+.final-message {
+    text-align: center;
+    font-weight: bold;
+    color: #d43c78;
+    margin-top: 20px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+@keyframes flicker {
+    from { transform: scale(1) rotate(-4deg); }
+    to { transform: scale(1.1) rotate(4deg); }
+}
+
+@keyframes smoke {
+    0% { opacity: 0.8; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-45px); }
+}
+
+@media (max-width: 480px) {
+    .gift {
+        width: 110px;
+        height: 120px;
+    }
+
+    .gift-box {
+        height: 75px;
+    }
+
+    .gift-box::before {
+        left: 44px;
+    }
+
+    .gift-lid {
+        top: 22px;
+    }
+
+    .letter {
+        padding: 22px 18px;
+        font-size: 0.95rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- FIRST SCREEN -->
+<section class="screen active" id="welcome">
+    <div class="heart">❤️</div>
+
+    <p class="intro-text">I HAVE A GIFT FOR YOU</p>
+
+    <h2>IT'S FOR TAUSIF AND IT'S WRAPPED WITH LOVE</h2>
+
+    <h1>Are you Roza? 💗</h1>
+
+    <button onclick="enterGifts()">Yes, I'm Roza! ❤️</button>
+</section>
+
+
+<!-- GIFT SCREEN -->
+<section class="screen" id="giftScreen">
+
+    <h1>Yayyy! It's You! 💗</h1>
+
+    <h2>Choose your gifts, birthday girl! 🎁</h2>
+
+    <div class="gifts">
+
+        <div class="gift" id="gift1" onclick="openGift(1)">
+            <div class="gift-number">Gift 1</div>
+            <div class="gift-lid"></div>
+            <div class="gift-box"></div>
+            <div class="gift-label">A little surprise 💕</div>
+        </div>
+
+        <div class="gift" id="gift2" onclick="openGift(2)">
+            <div class="gift-number">Gift 2</div>
+            <div class="gift-lid"></div>
+            <div class="gift-box"></div>
+            <div class="gift-label">Another surprise 🎀</div>
+        </div>
+
+        <div class="gift" id="gift3" onclick="openGift(3)">
+            <div class="gift-number">Gift 3</div>
+            <div class="gift-lid"></div>
+            <div class="gift-box"></div>
+            <div class="gift-label">Something special 💌</div>
+        </div>
+
+    </div>
+
+    <!-- FIRST CANDLE -->
+    <div class="gift-content" id="content1">
+        <h2>A candle just for you! 🕯️</h2>
+        <div class="candle-area">
+            <div class="candle">
+                <div class="flame" id="flame1"></div>
+                <div class="smoke" id="smoke1">〰️</div>
+            </div>
+        </div>
+        <button id="blow1" onclick="blowCandle(1)">Blow the candle 💨</button>
+        <p id="message1"></p>
+    </div>
+
+    <!-- SECOND CANDLE -->
+    <div class="gift-content" id="content2">
+        <h2>One more wish, princess! 🕯️</h2>
+        <div class="candle-area">
+            <div class="candle">
+                <div class="flame" id="flame2"></div>
+                <div class="smoke" id="smoke2">〰️</div>
+            </div>
+        </div>
+        <button id="blow2" onclick="blowCandle(2)">Blow the candle 💨</button>
+        <p id="message2"></p>
+    </div>
+
+    <!-- LETTER -->
+    <div class="gift-content" id="content3">
+        <h2>A letter from me to you 💌</h2>
+        <button onclick="openLetter()">Open your letter ❤️</button>
+
+        <div class="letter" id="letter">
+            <h2>Dear Roza ❤️</h2>
+
+Ami bhashay bole bujhaite parbo na
+how much you mean to me.
+
+It's been 2 months, only to be exact 70 days.
+I'm fully addicted, obsessed with you.
+
+Everything feels way more relaxed,
+calmer than ever before.
+This sort of love, this sort of treatment,
+this sort of caring —
+I dreamed of, and this all is a reality.
+Can't believe.
+
+I would just want to convey my gratitude
+to you from the core of my heart for everything.
+
+Ami tomake chara thakte parbo na.
+
+I love you to death. ❤️
+
+            <p class="final-message">
+Coming to the main point, on this special day
+I wanted to make you feel like the most loved
+woman on planet Earth.
+
+So all this is for you, a little try to make
+you feel loved. 🥹💗
+
+Finallyy happpppyyyyyyyyyy
+Birthdayyyyyyyyyyyyyy loveeeeee! ❤️🎂
+
+Yours, Tausif ❤️
+            </p>
+        </div>
+    </div>
+
+</section>
+
+
+<script>
+
+function enterGifts() {
+    document.getElementById("welcome").classList.remove("active");
+    document.getElementById("giftScreen").classList.add("active");
+
+    celebrate();
+}
+
+function openGift(number) {
+    const gift = document.getElementById("gift" + number);
+    const content = document.getElementById("content" + number);
+
+    gift.classList.add("opened");
+    content.classList.add("show");
+
+    content.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+    celebrate();
+}
+
+function blowCandle(number) {
+    const flame = document.getElementById("flame" + number);
+    const smoke = document.getElementById("smoke" + number);
+    const button = document.getElementById("blow" + number);
+    const message = document.getElementById("message" + number);
+
+    flame.classList.add("blown");
+    smoke.classList.add("show");
+
+    button.style.display = "none";
+    message.innerHTML = "Your wish is on its way, my love! 💗✨";
+
+    celebrate();
+}
+
+function openLetter() {
+    document.getElementById("letter").classList.add("show");
+
+    document.getElementById("letter").scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+    celebrate();
+}
+
+function celebrate() {
+    if (typeof confetti === "function") {
+        confetti({
+            particleCount: 100,
+            spread: 75,
+            origin: { y: 0.65 },
+            colors: ["#ff69a6", "#ffb6c1", "#ffffff", "#d8a4ff"]
+        });
+    }
+}
+
+</script>
+
+</body>
+</html>
